@@ -24,11 +24,14 @@ export function signUp(formData) {
     if (password !== password2) return reject({ message: ErrorMessages.passwordsDontMatch });
 
     await statusMessage(dispatch, 'loading', true);
+console.log('start authentication');
 
     // Go to Firebase
     return Firebase.auth()
       .createUserWithEmailAndPassword(email, password)
       .then((res) => {
+        console.log('success authenticate save to database');
+        
         // Send user details to Firebase database
         if (res && res.uid) {
           FirebaseRef.child(`users/${res.uid}`).set({
