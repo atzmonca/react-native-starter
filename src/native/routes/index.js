@@ -28,6 +28,7 @@ import MemberContainer from '../../containers/Member';
 import ProfileComponent from '../components/Profile';
 
 import AboutComponent from '../components/About';
+import CalendarComponent from '../components/calendar/calendar';
 
 const Index = (
   <Stack>
@@ -46,6 +47,13 @@ const Index = (
           {...DefaultProps.navbarProps}
         >
           <Scene key="home" component={AboutComponent} />
+        </Stack>
+
+         <Stack
+          key="calendar"
+          title="calendar"
+          {...DefaultProps.navbarProps}  >
+          <Scene key="calendar" component={CalendarComponent} />
         </Stack>
 
         <Stack
