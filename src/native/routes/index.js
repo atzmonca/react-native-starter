@@ -28,11 +28,12 @@ import MemberContainer from '../../containers/Member';
 import ProfileComponent from '../components/Profile';
 
 import AboutComponent from '../components/About';
-import CalendarComponent from '../components/calendar/calendar';
+import CalendarComponent from '../components/event/calendar/calendar';
+import EventForm from '../components/event/eventForm/EventForm';
 
 const Index = (
   <Stack>
-    <Scene hideNavBar>
+    <Scene >
       <Tabs
         key="tabbar"
         swipeEnabled
@@ -54,6 +55,14 @@ const Index = (
           title="calendar"
           {...DefaultProps.navbarProps}  >
           <Scene key="calendar" component={CalendarComponent} />
+        </Stack>
+
+        <Stack
+          key="eventForm"
+          title="event-form"
+          icon={() => <Icon name="planet" {...DefaultProps.icons} />}
+          {...DefaultProps.navbarProps}  >
+          <Scene key="eventForm" component={EventForm} Layout={RecipesComponent}/>
         </Stack>
 
         <Stack

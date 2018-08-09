@@ -7,7 +7,7 @@ import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 var today = new Date(),
 date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
-const MyCalendar = () => (
+const calendar = () => (
   <Container>
     <Content padder>
      
@@ -59,4 +59,4 @@ const MyCalendar = () => (
   </Container>
 );
 
-export default MyCalendar;
+export default calendar;
