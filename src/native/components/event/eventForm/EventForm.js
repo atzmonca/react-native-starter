@@ -1,89 +1,126 @@
-import React from 'react';
-import { reduxForm, Field } from 'redux-form';
-import { ScrollView, Text, TouchableOpacity } from 'react-native';
-import moment from 'moment';
+import React, { Component } from "react";
+import Expo from "expo";
+//import { View } from "react-native";
+import {Container,Item,Input,Header,Body,Content, Title,Button,  Text} from "native-base";
+//import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm } from 'redux-form/immutable'
+import DateInput from "../../../../common/form/DateInput";
+import TextInput from "../../../../common/form/TextInput";
+import moment from "moment";
+import { connect } from "react-redux";
+import { addEvent } from '../../../../../src/actions/event';
 
-import TextInput from '../../../../common/form/TextInput';
+const DATETIME_FORMAT = "YYYY-MM-DD HH:mm";
 
-/**
- * Automatically adds the dashes required by the specified phone format and limits the input to ten characters
- */
-const phoneFormatter = (number) => {
-  if (!number) return '';
-  // NNN-NNN-NNNN
-  const splitter = /.{1,3}/g;
-  number = number.substring(0, 10);
-  return number.substring(0, 7).match(splitter).join('-') + number.substring(7);
+
+const submit = values => {
+  console.log('submitting form', values.toJS())
+} 
+
+const validate = values => {
+  const error = {};
+  error.email = "";
+  error.name = "";
+  var ema = values.email;
+  var nm = values.name;
+  if (values.email === undefined) {
+    ema = "";
+  }
+  if (values.name === undefined) {
+    nm = "";
+  }
+  if (ema.length < 8 && ema !== "") {
+    error.email = "too short";
+  }
+  if (!ema.includes("@") && ema !== "") {
+    error.email = "@ not included";
+  }
+
+  if (nm.length > 8) {
+    error.name = "max 8 characters";
+  }
+  return error;
 };
-
-/**
- * Remove dashes added by the formatter. We want to store phones as plain numbers
- */
-const phoneParser = (number) => number ? number.replace(/-/g, '') : '';
-
-/**
- * Force after min date
- */
-const maxDateNormalize = (value, previousValue, values) => {
-  const momentMinDate = moment(values.minDate, 'MM-DD-YYYY', true);
-  const momentMaxDate = moment(value, 'MM-DD-YYYY', true);
-  if (!momentMinDate.isValid() || !momentMaxDate.isValid()) {
-    return value;
+class SimpleForm extends Component {
+  state = {
+    title:'',
+    startDate: moment().format('YYYY-MM-DD HH:mm'),
+    event:{},
+    isReady:false,
+   // viewMode: Dimensions.get("window").height > 500 ? "portrait" : "landscape",
+  };
+  constructor(props) {
+ 
+    super(props);
+  //  this.renderInput = this.renderInput.bind(this);
   }
-  if (!momentMaxDate.isAfter(momentMinDate)) {
-    return momentMinDate.add(1, 'd').format('MM-DD-YYYY');
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+      Roboto: require("native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
+    });
+    this.setState({ isReady: true });
   }
-  return value;
-};
 
-/**
- * Force before max date
- */
-const minDateNormalize = (value, previousValue, values) => {
-  const momentMaxDate = moment(values.maxDate, 'MM-DD-YYYY', true);
-  const momentMinDate = moment(value, 'MM-DD-YYYY', true);
-  if (!momentMinDate.isValid() || !momentMaxDate.isValid()) {
-    return value;
+  handleChange = (name, val) => {
+    console.log('handle changed: ', name);
+    
+    this.setState({
+      [name]: val,
+    });
   }
-  if (!momentMinDate.isBefore(momentMaxDate)) {
-    return momentMaxDate.subtract(1, 'd').format('MM-DD-YYYY');
-  }
-  return value;
-};
 
-function EventForm(props) {
-  return (
-    <ScrollView keyboardShouldPersistTaps={'handled'}>
-      <Text>Phone number</Text>
-      <Field
-        name={'phoneNumber'}
-        component={TextInput}
-        placeholder={'NNN-NNN-NNNN'}
-        format={phoneFormatter}
-        parse={phoneParser}
-      />
-      <Text>Min date</Text>
-      <Field
-        name={'minDate'}
-        component={TextInput}
-        placeholder={'MM-DD-YYYY'}
-        normalize={minDateNormalize}
-      />
-      <Text>Max date</Text>
-      <Field
-        name={'maxDate'}
-        component={TextInput}
-        placeholder={'MM-DD-YYYY'}
-        normalize={maxDateNormalize}
-      />
-      <TouchableOpacity onPress={props.handleSubmit}>
-        <Text>Submit!</Text>
-      </TouchableOpacity>
-    </ScrollView>
-  );
+  addEvent = () => {
+    const newEvent = {
+      title:this.state.title
+    }
+    console.log('new event: ', newEvent);
+    
+  //  this.props.addEvent(newEvent);
+ //   this.props.addEvent(event);
+ //console.log('add event ', values);
+ 
+  }
+  render() {
+    const { handleSubmit, reset } = this.props;
+    if (!this.state.isReady) {
+      return <Expo.AppLoading />;
+    }
+    return (
+      <Container style={{ backgroundColor: "#eafcf9" }}>
+        <Header>
+          <Body>
+            <Title>Event Form</Title>
+          </Body>
+        </Header>
+        <Content padder>
+          <Field name="title" onChange={v => this.handleChange('title', v)}  component={TextInput} placeholder="Title" />
+          <Field
+            name="name"
+            value={this.state.event.startDate}
+            component={DateInput}
+            placeholder="Start Date"
+            dateFormat={DATETIME_FORMAT}
+          />
+          <Button style={{ margin: 10 }} block primary onPress={this.addEvent} >
+            <Text>Submit</Text>
+          </Button>
+        </Content>
+      </Container>
+    );
+  }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    addEvent: event => dispatch(addEvent(event))
+  };
+};
 
 export default reduxForm({
-  form: 'EventForm'
-})(EventForm);
+  form: 'add_event_form',
+  validate
+})(connect(null, mapDispatchToProps)(SimpleForm))
+
+
+

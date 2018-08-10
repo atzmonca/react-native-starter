@@ -33,7 +33,7 @@ import EventForm from '../components/event/eventForm/EventForm';
 
 const Index = (
   <Stack>
-    <Scene >
+    <Scene hideNavBar>
       <Tabs
         key="tabbar"
         swipeEnabled
@@ -53,16 +53,17 @@ const Index = (
          <Stack
           key="calendar"
           title="calendar"
+          icon={() => <Icon name="calendar" {...DefaultProps.icons} />}
           {...DefaultProps.navbarProps}  >
           <Scene key="calendar" component={CalendarComponent} />
         </Stack>
 
         <Stack
           key="eventForm"
-          title="event-form"
+          //title="event-form"
           icon={() => <Icon name="planet" {...DefaultProps.icons} />}
           {...DefaultProps.navbarProps}  >
-          <Scene key="eventForm" component={EventForm} Layout={RecipesComponent}/>
+          <Scene key="eventForm" component={EventForm} />
         </Stack>
 
         <Stack

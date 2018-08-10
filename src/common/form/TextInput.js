@@ -1,32 +1,36 @@
 
 
-import { TextInput, View } from 'react-native';
-import React from 'react';
+import {  View } from 'react-native';
+import {  Text,  Container,Item ,Input} from "native-base";
+import React, { Component } from 'react'
+
+ class TextInput extends Component {
+
+  
+  render() {
+    const {
+      input,
+      width,
+      placeholder,
+      meta: { touched, error },
+      ...rest
+    } = this.props;
+  
+    var hasError= false;
+    if(error !== undefined){
+      hasError= true;
+    }
 
 
-const MyTextInput = ({input,width,type,placeholder, meta:{touched,error}}) => {
-  return (
-    <View>
-    <TextInput
-     // {...inputProps}
-      onChangeText={input.onChange}
-      onBlur={input.onBlur}
-      onFocus={input.onFocus}
-      value={input.value}
-
-
-      error={touched && !!error} width={width} 
-      {...input}
-       placeholder={placeholder}
-        type={type}
-      />
-  </View>
-
-/*     <Form.Field error={touched && !!error} width={width} >
-        <input {...input} placeholder={placeholder} type={type} />
-        {touched && error && <Label basic color='red'> {error}</Label>}
-    </Form.Field> */
+    return (
     
-  )
+      <Item style={{ margin: 10 }} error={hasError}>
+        <Input placeholder={placeholder} onChangeText={input.onChange} />
+        {hasError ? <Text>{error}</Text> : <Text />}
+      </Item>
+
+     
+    )
+  }
 }
-export default MyTextInput
+export default TextInput
