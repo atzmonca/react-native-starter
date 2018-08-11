@@ -3,7 +3,7 @@ import member from "./member";
 import recipes from "./recipes";
 import locale from "./locale";
 //import event from "./event";
-import events from "./eventReducer";
+import events from "./event";
 
 const rehydrated = (state = false, action) => {
   // console.log('inside rehydrated in index.js', state);

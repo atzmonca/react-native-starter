@@ -42,6 +42,14 @@ const Index = (
         showLabel={false}
         {...DefaultProps.tabProps}
       >
+      
+      <Stack
+          key="eventForm"
+          //title="event-form"
+          icon={() => <Icon name="planet" {...DefaultProps.icons} />}
+          {...DefaultProps.navbarProps}  >
+          <Scene key="eventForm" component={EventForm} />
+        </Stack> 
         <Stack
           key="home"
           title={AppConfig.appName.toUpperCase()}
@@ -59,21 +67,14 @@ const Index = (
           <Scene key="calendar" component={CalendarComponent} />
         </Stack>
 
-         <Stack
-          key="eventForm"
-          //title="event-form"
-          icon={() => <Icon name="planet" {...DefaultProps.icons} />}
-          {...DefaultProps.navbarProps}  >
-          <Scene key="eventForm" component={EventForm} />
-        </Stack> 
-
+ 
           <Stack
           key="eventsList"
           //title="event-form"
           icon={() => <Icon name="planet" {...DefaultProps.icons} />}
           {...DefaultProps.navbarProps}  >
           <Scene key="EventsList" component={EventsListPage} />
-        </Stack>
+        </Stack> 
 
 
      {/*    <Stack
