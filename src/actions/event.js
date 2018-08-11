@@ -3,9 +3,12 @@ import { Translations, DEFAULT_LOCALE } from '../i18n';
 import ErrorMessages from '../constants/errors';
 import { ADD_EVENT } from './actionTypes'
 
-export const addEvent = (event) => {
+export const addEvent = (eventData) => {
+  console.log('event inside action: ' , eventData);
+  
   return {
     type: ADD_EVENT,
-    event: event
+    eventData: eventData
   }
 }
+

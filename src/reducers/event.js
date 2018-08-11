@@ -1,11 +1,56 @@
 import { createReducer } from '../common/util/reducerUtil';
-import { CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT , FETCH_EVENTS } from "../native/components/event/eventConstants";
+import { ADD_EVENT } from "../actions/actionTypes";
+import Store from '../store/event';
 
 
- const initialState =[];
+ //export const initialState = Store;
+ const initialState = {
+  events: []
+};
+
+ //mport Store from '../store/member';
+
+//export const initialState = Store;
+
+export default function eventReducer(state = initialState, action) {
+  switch (action.type) {
+    case 'ADD_EVENT': {
+      console.log('add event action inside reducer: ' , action.eventData);
+      
+      if (action.eventData) {
+        console.log("inside reducer event. state ", state);
+        
+        return {
+          ...state,
+          events: state.events.concat({
+            id: Math.random(),
+            title: action.eventData.title,
+            startDatetime: action.eventData.startDatetime
+          })
+          
+        
+        };
+      }
+      return initialState;
+    }
+   
+    default:
+      return state;
+  }
+}
 
 
-export const createEvent = (state, payload) => {
+
+
+
+
+
+/* 
+
+
+export const createEvent = (state=initialState, payload) => {
+  console.log('inside reducer: ' , payload);
+  
   return [...state, Object.assign({}, payload.event)];
 };
 
@@ -30,8 +75,7 @@ export const fetchEvents = (state, payload) => {
 };
 
 export default createReducer(initialState, {
-  [CREATE_EVENT]: createEvent,
-  [UPDATE_EVENT]: updateEvent,
-  [DELETE_EVENT]: deleteEvent,
-  [FETCH_EVENTS]:  fetchEvents
+  [ADD_EVENT]: createEvent,
+
 });
+ */

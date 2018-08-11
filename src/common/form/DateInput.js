@@ -9,12 +9,16 @@ import TextInput from "./TextInput";
 
 class DateInput extends Component {
   
+
+
+
   render() {
 
   
     const {
       input,
       _showDateTimePicker,
+      handleChange,
       width,
       placeholder,
       dateFormat,
@@ -27,16 +31,27 @@ class DateInput extends Component {
       hasError= true;
     }
 
+
+
     return (
       <View>
         <Item style={{ margin: 10 }} error={hasError}>
-          <Input {...input} placeholder={placeholder} onFocus={this._showDateTimePicker} format={dateFormat} value={this.state.selectedDateTime} onBlur={this._hideDateTimePicker}/>
+          <Input {...input} placeholder={placeholder} 
+          selectedDatetime={this.state.selectedDateTime}
+           onFocus={this._showDateTimePicker} 
+           onChangeText={input.onChange}
+          format={dateFormat}
+           value={this.state.selectedDateTime}
+           onBlur={this._hideDateTimePicker}/>
           {hasError ? <Text>{error}</Text> : <Text />}
         </Item>
         <DateTimePicker
           isVisible={this.state.isDateTimePickerVisible}
           onConfirm={this._handleDatePicked}
           onCancel={this._hideDateTimePicker}
+          onHideAfterConfirm={() => {
+            handleChange(this.state.selectedDateTime)}
+          }
           mode="datetime"
         />
       </View>
@@ -48,6 +63,8 @@ class DateInput extends Component {
     selectedDateTime:moment().format('YYY-MM-DD HH:mm')
   };
 
+
+ 
   /* DATE TIME handle methods */
   _showDateTimePicker = () => {
     console.log("start show date picker");
@@ -65,6 +82,7 @@ class DateInput extends Component {
       selectedDateTime:  dateWrapper
     });
     this._hideDateTimePicker();
+  ;
   };
 
   /* END DATE TIME METHODS */

@@ -8,6 +8,8 @@ const rehydrated = (state = false, action) => {
   switch (action.type) {
     case 'persist/REHYDRATE':
       return true;
+      case 'ADD_EVENT':
+      return true;
     default:
       return state;
   }

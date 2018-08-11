@@ -3,6 +3,7 @@
 import {  View } from 'react-native';
 import {  Text,  Container,Item ,Input} from "native-base";
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
  class TextInput extends Component {
 
@@ -25,7 +26,8 @@ import React, { Component } from 'react'
     return (
     
       <Item style={{ margin: 10 }} error={hasError}>
-        <Input placeholder={placeholder} onChangeText={input.onChange} />
+        <Input placeholder={placeholder} 
+        onChangeText={input.onChange} />
         {hasError ? <Text>{error}</Text> : <Text />}
       </Item>
 

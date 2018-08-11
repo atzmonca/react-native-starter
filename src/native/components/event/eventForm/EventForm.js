@@ -8,16 +8,15 @@ import DateInput from "../../../../common/form/DateInput";
 import TextInput from "../../../../common/form/TextInput";
 import moment from "moment";
 import { connect } from "react-redux";
-import { addEvent } from '../../../../../src/actions/event';
+import  addEvent  from '../../../../../src/actions/event';
+import PropTypes from 'prop-types';
 
 const DATETIME_FORMAT = "YYYY-MM-DD HH:mm";
 
 
-const submit = values => {
-  console.log('submitting form', values.toJS())
-} 
 
-const validate = values => {
+
+ const validate = values => {
   const error = {};
   error.email = "";
   error.name = "";
@@ -40,7 +39,8 @@ const validate = values => {
     error.name = "max 8 characters";
   }
   return error;
-};
+}; 
+
 class SimpleForm extends Component {
   state = {
     title:'',
@@ -49,9 +49,14 @@ class SimpleForm extends Component {
     isReady:false,
    // viewMode: Dimensions.get("window").height > 500 ? "portrait" : "landscape",
   };
+
+  static propTypes = {
+    addEvent: PropTypes.func.isRequired,
+  }
   constructor(props) {
- 
     super(props);
+    this.handleAddEvent = this.handleAddEvent.bind(this);
+    console.log(props);
   //  this.renderInput = this.renderInput.bind(this);
   }
   async componentWillMount() {
@@ -66,23 +71,37 @@ class SimpleForm extends Component {
     console.log('handle changed: ', name);
     
     this.setState({
-      [name]: val,
+      event:{
+        [name]: val,
+      }
+     
     });
   }
 
-  addEvent = () => {
-    const newEvent = {
+  handleAddEvent = () => {
+    let event = {
       title:this.state.title
     }
-    console.log('new event: ', newEvent);
-    
-  //  this.props.addEvent(newEvent);
+    console.log('new state: ', this.state);
+    const { addEvent } = this.props;
+  addEvent(this.state)
+  .catch(e => console.log(`Error: ${e}`));
  //   this.props.addEvent(event);
  //console.log('add event ', values);
  
   }
   render() {
-    const { handleSubmit, reset } = this.props;
+    //const { handleSubmit, reset } = this.props;
+    const { state, actions } = this.props;
+
+    this.propTypes = {
+      onClick: PropTypes.func.isRequired,
+      completed: PropTypes.bool.isRequired,
+      text: PropTypes.string.isRequired
+    }
+
+
+
     if (!this.state.isReady) {
       return <Expo.AppLoading />;
     }
@@ -102,7 +121,7 @@ class SimpleForm extends Component {
             placeholder="Start Date"
             dateFormat={DATETIME_FORMAT}
           />
-          <Button style={{ margin: 10 }} block primary onPress={this.addEvent} >
+          <Button style={{ margin: 10 }} block primary onPress={this.handleAddEvent} >
             <Text>Submit</Text>
           </Button>
         </Content>
@@ -113,7 +132,7 @@ class SimpleForm extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addEvent: event => dispatch(addEvent(event))
+    event: event => dispatch(addEvent(event))
   };
 };
 

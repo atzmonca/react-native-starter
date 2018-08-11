@@ -29,7 +29,7 @@ import ProfileComponent from '../components/Profile';
 
 import AboutComponent from '../components/About';
 import CalendarComponent from '../components/event/calendar/calendar';
-import EventForm from '../components/event/eventForm/EventForm';
+import EventForm from '../components/event/eventForm/EventFormTest';
 
 const Index = (
   <Stack>
