@@ -1,15 +1,20 @@
-import status from './status';
-import member from './member';
-import recipes from './recipes';
-import locale from './locale';
-import event from './event';
+import status from "./status";
+import member from "./member";
+import recipes from "./recipes";
+import locale from "./locale";
+//import event from "./event";
+import events from "./eventReducer";
 
 const rehydrated = (state = false, action) => {
+  // console.log('inside rehydrated in index.js', state);
+
   switch (action.type) {
-    case 'persist/REHYDRATE':
+    case "persist/REHYDRATE":
       return true;
-      case 'ADD_EVENT':
+    case "ADD_EVENT":
       return true;
+ //   case "FETCH_EVENTS":
+   //   return true;
     default:
       return state;
   }
@@ -21,5 +26,5 @@ export default {
   member,
   recipes,
   locale,
-  event
+  events
 };

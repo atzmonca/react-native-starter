@@ -13,21 +13,61 @@ import {
   Text
 } from "native-base";
 //import { Field, reduxForm } from "redux-form";
-import { Field, reduxForm } from "redux-form/immutable";
+import { Field, reduxForm } from "redux-form";
 import DateInput from "../../../../common/form/DateInput";
 import TextInput from "../../../../common/form/TextInput";
 import moment from "moment";
 import { connect } from "react-redux";
-import { addEvent } from "../../../../../src/actions/event";
+import { createEvent, updateEvent } from "../../../../../src/actions/event";
 import PropTypes from "prop-types";
+import cuid from "cuid";
+import {
+  composeValidators,
+  combineValidators,
+  isRequired,
+  hasLengthGreaterThan
+} from "revalidate";
+
+
 
 const DATETIME_FORMAT = "YY-MM-DD HH:mm";
-let id_counter = 2;
 
-class EventFormTest extends Component {
-  state = {
-    event: {}
+const mapState = (state, ownProps) => {
+  const eventId = null;//ownProps.match.params.id;
+  let event = {};
+  if (eventId && state.events.length > 0) {
+    event = state.events.filter(event => event.id === eventId)[0];
+  }
+  return {
+    initialValues: event
   };
+};
+
+const actions = {
+  createEvent,
+  updateEvent
+};
+
+const validate = combineValidators({
+  title: isRequired({ message: " The event title is required" }),
+ /*  category: isRequired({ message: " TheCategory is required" }),
+  description: composeValidators(
+    isRequired({ message: " Please enter description" }),
+    hasLengthGreaterThan(4)({
+      message: " Description need to be at least 6 characters"
+    })
+  )(),
+  city: isRequired("city"),
+  venue: isRequired("venue"),
+  date: isRequired("date") */
+});
+
+
+class EventForm extends Component {
+state = {
+  isReady:false
+}
+
   handleChange = (name, val) => {
     console.log("handle changed: ", val);
 
@@ -38,7 +78,25 @@ class EventFormTest extends Component {
     console.log("handle state: ", this.state);
   };
 
-  handleAddEvent = () => {
+  
+
+  onFormSubmit = () => {
+    console.log('values',this.state);
+    const newEvent = {
+      
+      id: cuid(),
+      title:this.state.title,
+    //  hostPhotoURL: "/assets/user.png",
+      hostedBy: "Bob"
+    };
+    console.log('call to create event with new obj: ', newEvent);
+    
+      this.props.createEvent(newEvent);
+    
+    }
+  
+
+  /*   handleAddEvent = () => {
     console.log("handel event: ", this.state.event);
 
     const eventData = {
@@ -48,7 +106,7 @@ class EventFormTest extends Component {
     console.log("eventData: ", eventData);
 
     this.props.onAddEvent(eventData);
-  };
+  }; */
 
   render() {
     if (!this.state.isReady) {
@@ -70,10 +128,10 @@ class EventFormTest extends Component {
           />
           <Field
             name="startDatetime"
-            value={this.state.startDatetime}
+        //    value={this.state.startDatetime}
             component={DateInput}
             // selectedDatetime={selectedDatetime => this.handleChange('startDatetime',selectedDatetime)}
-            handleChange={v => this.handleChange("startDatetime", v)}
+        //    handleChange={v => this.handleChange("startDatetime", v)}
             placeholder="Start Date"
             dateFormat={DATETIME_FORMAT}
           />
@@ -81,7 +139,7 @@ class EventFormTest extends Component {
             style={{ margin: 10 }}
             block
             primary
-            onPress={this.handleAddEvent}
+            onPress={this.props.handleSubmit(this.onFormSubmit)}
           >
             <Text>Submit</Text>
           </Button>
@@ -99,18 +157,23 @@ class EventFormTest extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onAddEvent: eventData => dispatch(addEvent(eventData))
-  };
-};
+export default connect(
+  mapState,
+  actions
+)(
+  reduxForm({ form: "eventForm", enableReinitialize: true, validate })(
+    EventForm
+  )
+);
 
-export default reduxForm({
-  form: "add_event_form"
-  //validate
+/* export default reduxForm({
+  form: "eventForm",
+  enableReinitialize: true,
+  validate
 })(
   connect(
-    null,
-    mapDispatchToProps
-  )(EventFormTest)
+    mapState,
+    actions
+  )(EventForm)
 );
+ */

@@ -30,6 +30,7 @@ import ProfileComponent from '../components/Profile';
 import AboutComponent from '../components/About';
 import CalendarComponent from '../components/event/calendar/calendar';
 import EventForm from '../components/event/eventForm/EventFormTest';
+import EventsListPage from '../screen/event/EventListPageTest';
 
 const Index = (
   <Stack>
@@ -58,22 +59,31 @@ const Index = (
           <Scene key="calendar" component={CalendarComponent} />
         </Stack>
 
-        <Stack
+         <Stack
           key="eventForm"
           //title="event-form"
           icon={() => <Icon name="planet" {...DefaultProps.icons} />}
           {...DefaultProps.navbarProps}  >
           <Scene key="eventForm" component={EventForm} />
+        </Stack> 
+
+          <Stack
+          key="eventsList"
+          //title="event-form"
+          icon={() => <Icon name="planet" {...DefaultProps.icons} />}
+          {...DefaultProps.navbarProps}  >
+          <Scene key="EventsList" component={EventsListPage} />
         </Stack>
 
-        <Stack
+
+     {/*    <Stack
           key="recipes"
           title="RECIPES"
           icon={() => <Icon name="book" {...DefaultProps.icons} />}
           {...DefaultProps.navbarProps}
         >
           <Scene key="recipes" component={RecipesContainer} Layout={RecipesComponent} />
-        </Stack>
+        </Stack> */}
 
         <Stack
           key="profile"
