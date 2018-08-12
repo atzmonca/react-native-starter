@@ -28,12 +28,16 @@ import {
   hasLengthGreaterThan
 } from "revalidate";
 
-
-
 const DATETIME_FORMAT = "YY-MM-DD HH:mm";
 
+/* const mapState = state => ({
+  events: state.events,
+  selectedEvent: null,
+  selectedDate: new Date()
+}); */
+
 const mapState = (state, ownProps) => {
-  const eventId = null;//ownProps.match.params.id;
+  const eventId = null; //ownProps.match.params.id;
   let event = {};
   if (eventId && state.events.length > 0) {
     event = state.events.filter(event => event.id === eventId)[0];
@@ -49,8 +53,8 @@ const actions = {
 };
 
 const validate = combineValidators({
-  title: isRequired({ message: " The event title is required" }),
- /*  category: isRequired({ message: " TheCategory is required" }),
+  title: isRequired({ message: " The event title is required" })
+  /*  category: isRequired({ message: " TheCategory is required" }),
   description: composeValidators(
     isRequired({ message: " Please enter description" }),
     hasLengthGreaterThan(4)({
@@ -62,11 +66,11 @@ const validate = combineValidators({
   date: isRequired("date") */
 });
 
-
 class EventForm extends Component {
-state = {
-  isReady:false
-}
+  state = {
+    isReady: false,
+    selectedDatetime:moment().format('YYYY-MM-DD')
+  };
 
   handleChange = (name, val) => {
     console.log("handle changed: ", val);
@@ -74,39 +78,20 @@ state = {
     this.setState({
       [name]: val
     });
-
     console.log("handle state: ", this.state);
   };
 
-  
-
   onFormSubmit = () => {
-    console.log('values',this.state);
+    console.log("values", this.state);
     const newEvent = {
-      
       id: cuid(),
-      title:this.state.title,
-    //  hostPhotoURL: "/assets/user.png",
+      title: this.state.title,
+      //  hostPhotoURL: "/assets/user.png",
       hostedBy: "Bob"
     };
-    console.log('call to create event with new obj: ', newEvent);
-    
-      this.props.createEvent(newEvent);
-    
-    }
-  
-
-  /*   handleAddEvent = () => {
-    console.log("handel event: ", this.state.event);
-
-    const eventData = {
-      title: this.state.title,
-      startDatetime: this.state.startDatetime
-    };
-    console.log("eventData: ", eventData);
-
-    this.props.onAddEvent(eventData);
-  }; */
+    console.log("call to create event with new obj: ", newEvent);
+    this.props.createEvent(newEvent);
+  };
 
   render() {
     if (!this.state.isReady) {
@@ -126,15 +111,14 @@ state = {
             component={TextInput}
             placeholder="Title"
           />
-          <Field
-            name="startDatetime"
-        //    value={this.state.startDatetime}
+         <Field
+            name="startDate"
+            onChange={v => this.handleChange("startDate", v)}
             component={DateInput}
-            // selectedDatetime={selectedDatetime => this.handleChange('startDatetime',selectedDatetime)}
-        //    handleChange={v => this.handleChange("startDatetime", v)}
+            selectedDatetime ={this.state.selectedDatetime}
             placeholder="Start Date"
             dateFormat={DATETIME_FORMAT}
-          />
+          /> 
           <Button
             style={{ margin: 10 }}
             block
@@ -165,15 +149,3 @@ export default connect(
     EventForm
   )
 );
-
-/* export default reduxForm({
-  form: "eventForm",
-  enableReinitialize: true,
-  validate
-})(
-  connect(
-    mapState,
-    actions
-  )(EventForm)
-);
- */

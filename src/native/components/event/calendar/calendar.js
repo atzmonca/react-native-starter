@@ -6,63 +6,49 @@ import moment from "moment";
 //import Spacer from "../Spacer";
 
 let today = new Date();
-let date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
-  state={};
+let date =
+  today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+state = {};
 
 //
 class CalenderComponent extends Component {
-
-componentDidMount(prevProps,prevState){
-  
+  componentDidMount(prevProps, prevState) {
     this.handleMarkEvents();
-  
-}
+  }
 
   handleMarkEvents = () => {
-    this.state.events.map(event => {
-   
-      markedArray = {};
-      this.state.events.map(event => {
-        console.log("event startDate", event.startDate);
-     //   console.log("moment time format", moment(event.startDate).format("YYYY-MM-DD"));
-
-        var prop_name = moment(event.startDate).format("YYYY-MM-DD");
-        Object.defineProperty(markedArray, prop_name, {
-          writable: true,
-          configurable:true,
-          enumerable:true,
-          value:{ marked: true, dotColor: "red", activeOpacity: 0 }
-        });
-     
+    markedArray = {};
+    this.props.events.map(event => {
+      var prop_name = moment(event.startDate).format("YYYY-MM-DD");
+      Object.defineProperty(markedArray, prop_name, {
+        writable: true,
+        configurable: true,
+        enumerable: true,
+        value: { marked: true, dotColor: "red", activeOpacity: 0 }
       });
-    //  console.log("markedArray", markedArray);
-
-
-      this.setState({ markedDates: markedArray }, () => {
-        console.log(this.state.markedDates);
-      });
-     
     });
-    //console.log("this.state.markedDates", this.state.markedDates);
+
+    this.setState({ markedDates: markedArray }, () => {
+      //  console.log(this.state.markedDates);
+    });
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      events: props.events,
-      selectedDate: new Date(),
+      //   selectedDate: new Date(),
       markedDates: {
-     /*    "2018-08-16": { selected: true, marked: true, selectedColor: "blue" },
+        /*    "2018-08-16": { selected: true, marked: true, selectedColor: "blue" },
         "2018-08-17": { marked: true },
         "2018-08-18": { marked: true, dotColor: "red", activeOpacity: 0 },
         "2018-08-19": { disabled: true, disableTouchEvent: true } */
       }
     };
-  //  this.handleMarkEvents();
   }
 
   render() {
-    const { events, OnDayPress } = this.props;
+    const { events, OnDayPress,SelectedDate } = this.props;
+console.log('SelectedDate',SelectedDate);
 
     return (
       <Container>
@@ -70,7 +56,7 @@ componentDidMount(prevProps,prevState){
           <Calendar
             markedDates={this.state.markedDates}
             // Initially visible month. Default = Date()
-            current={"2018-08-12"}
+            current={SelectedDate} //{"2018-08-12"}
             // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
             minDate={"2012-05-10"}
             // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
