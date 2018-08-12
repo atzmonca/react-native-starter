@@ -20,9 +20,7 @@ import {
   import Header from "../../Header";
   import Spacer from "../../Spacer";
 
- class EventListTest extends Component {
-    
-on
+ class EventList extends Component {
 
   render() {
     const {events,onEventEdit} = this.props;
@@ -68,4 +66,4 @@ on
   }
 }
 
-export default EventListTest;
+export default EventList;

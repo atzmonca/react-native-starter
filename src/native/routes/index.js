@@ -29,8 +29,9 @@ import ProfileComponent from '../components/Profile';
 
 import AboutComponent from '../components/About';
 import CalendarComponent from '../components/event/calendar/calendar';
-import EventForm from '../components/event/eventForm/EventFormTest';
-import EventsListPage from '../screen/event/EventListPageTest';
+//import CalendarAgenda from '../components/event/calendar/CalendarAgenda';
+import EventForm from '../components/event/eventForm/EventForm';
+import EventsListPage from '../screen/event/EventListPage';
 
 const Index = (
   <Stack>
