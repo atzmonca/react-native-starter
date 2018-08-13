@@ -30,13 +30,11 @@ import {
 
 const DATETIME_FORMAT = "YY-MM-DD HH:mm";
 
-/* const mapState = state => ({
-  events: state.events,
-  selectedEvent: null,
-  selectedDate: new Date()
-}); */
+ const mapState = state => ({
+  selectedDate: null
+});  
 
-const mapState = (state, ownProps) => {
+/* const mapState = (state, ownProps) => {
   const eventId = null; //ownProps.match.params.id;
   let event = {};
   if (eventId && state.events.length > 0) {
@@ -46,7 +44,7 @@ const mapState = (state, ownProps) => {
     initialValues: event
   };
 };
-
+ */
 const actions = {
   createEvent,
   updateEvent
@@ -69,12 +67,12 @@ const validate = combineValidators({
 class EventForm extends Component {
   state = {
     isReady: false,
-    selectedDatetime:moment().format('YYYY-MM-DD')
+   // selectedDatetime:moment().format('YYYY-MM-DD')
   };
 
   handleChange = (name, val) => {
     console.log("handle changed: ", val);
-
+    console.log("handle changed name: ", name);
     this.setState({
       [name]: val
     });
@@ -94,6 +92,7 @@ class EventForm extends Component {
   };
 
   render() {
+   var today = moment().format('YYYY-MM-DD HH:mm');
     if (!this.state.isReady) {
       return <Expo.AppLoading />;
     }
@@ -113,12 +112,30 @@ class EventForm extends Component {
           />
          <Field
             name="startDate"
-            onChange={v => this.handleChange("startDate", v)}
+            selectedDatetime={today}
             component={DateInput}
-            selectedDatetime ={this.state.selectedDatetime}
+            onDatePicked ={v => this.handleChange("startDate",v)}
             placeholder="Start Date"
             dateFormat={DATETIME_FORMAT}
           /> 
+
+             <Field
+            name="endDate"
+            selectedDatetime={today}
+            component={DateInput}
+            onDatePicked ={v => this.handleChange("endDate",v)}
+            placeholder="End Date"
+            dateFormat={DATETIME_FORMAT}
+          />
+
+             <Field
+            name="location"
+            onChange={v => this.handleChange("location", v)}
+            component={TextInput}
+            placeholder="Location"
+          />
+
+
           <Button
             style={{ margin: 10 }}
             block
