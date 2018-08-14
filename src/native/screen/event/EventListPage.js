@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {  Item ,Input} from "native-base";
 import EventList from "../../../native/components/event/eventsList/EventList";
 import { fetchEvents } from "../../../../src/actions/event";
 import { connect } from "react-redux";

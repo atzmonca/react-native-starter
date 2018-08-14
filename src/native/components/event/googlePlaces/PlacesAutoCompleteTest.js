@@ -14,8 +14,10 @@ class PlacesAutoCompleteTest extends Component {
         autoFocus={false}
         fetchDetails={true}
         onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-          console.log(data);
-          console.log(details);
+
+      //    console.log(data);
+        //  console.log(details);
+          this.props.OnLocationSelect(details);
         }}
       /*   getDefaultValue={() => {
           return ''; // text input default value
@@ -24,7 +26,7 @@ class PlacesAutoCompleteTest extends Component {
           // available options: https://developers.google.com/places/web-service/autocomplete
           key: 'AIzaSyCX7_mbw1PnmHSPLa144Q4IoTrgr_GSyFw',
           language: 'en', // language of the results
-          types: '(cities)', // default: 'geocode'
+        //  types: '(cities)', // default: 'geocode'
         }}
         styles={{
             textInputContainer: {

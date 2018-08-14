@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import Expo from "expo";
-import { View, Modal, TouchableHighlight } from "react-native";
+import {
+  View,
+  Modal,
+  TouchableHighlight,
+  KeyboardAvoidingView
+} from "react-native";
 import {
   Container,
   Item,
@@ -29,26 +34,14 @@ import {
 } from "revalidate";
 
 import GooglePlacesInput from "../googlePlaces/PlacesAutoCompleteTest";
-
-//import GoogleMapComponent from '../googlePlaces/GoogleMapComponent'
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const DATETIME_FORMAT = "YY-MM-DD HH:mm";
 
 const mapState = state => ({
   selectedDate: null
 });
-// to do only once
-/* const mapState = (state, ownProps) => {
-  const eventId = null; //ownProps.match.params.id;
-  let event = {};
-  if (eventId && state.events.length > 0) {
-    event = state.events.filter(event => event.id === eventId)[0];
-  }
-  return {
-    initialValues: event
-  };
-};
- */
+
 const actions = {
   createEvent,
   updateEvent
@@ -71,13 +64,20 @@ const validate = combineValidators({
 class EventForm extends Component {
   state = {
     isReady: false,
-    modalVisible: false
+    modalVisible: false,
+    title: "",
+    startDate: "",
+    endDate: "",
+    location: {
+      lat: null,
+      lng: null,
+      formatted_address: ""
+    }
     // selectedDatetime:moment().format('YYYY-MM-DD')
   };
 
   constructor(props) {
     super(props);
- 
   }
 
   handleChange = (name, val) => {
@@ -89,11 +89,27 @@ class EventForm extends Component {
     console.log("handle state: ", this.state);
   };
 
+  handleLocationSelect = details => {
+    // console.log('inside handleLocationSelect', data.description);
+    console.log("details:", details.formatted_address);
+    console.log("location:", details.geometry.location);
+    this.setState({
+      location: {
+        lat: details.geometry.location.lat,
+        lng: details.geometry.location.lng,
+        formatted_address: details.formatted_address
+      }
+    });
+  };
+
   onFormSubmit = () => {
     console.log("values", this.state);
     const newEvent = {
       id: cuid(),
       title: this.state.title,
+      location: this.state.location,
+      startDate: this.state.startDate,
+      endDate: this.state.endDate,
       //  hostPhotoURL: "/assets/user.png",
       hostedBy: "Bob"
     };
@@ -102,7 +118,7 @@ class EventForm extends Component {
   };
 
   setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+    this.setState({ modalVisible: visible });
   }
 
   render() {
@@ -111,7 +127,13 @@ class EventForm extends Component {
       return <Expo.AppLoading />;
     }
     return (
-      <Container style={{ backgroundColor: "#eafcf9" }}>
+      <KeyboardAwareScrollView
+        style={{ backgroundColor: "#4c69a5" }}
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        // contentContainerStyle={styles.container}
+        scrollEnabled={true}
+        style={{ backgroundColor: "#eafcf9" }}
+      >
         <Header>
           <Body>
             <Title>Event Form</Title>
@@ -125,7 +147,12 @@ class EventForm extends Component {
             placeholder="Title"
           />
 
-{/*           <Field
+ <Item>
+              <Input placeholder="Location" onFocus={() => console.log('kay press')}
+              />
+            </Item>
+
+         {/*  <Field
             name="place"
             //   onChange={v => this.handleChange("title", v)}
             component={GooglePlacesInput}
@@ -148,24 +175,24 @@ class EventForm extends Component {
             placeholder="End Date"
             dateFormat={DATETIME_FORMAT}
           />
-
-           <Field
+         
+          {/*  <Field
             name="location"
             component={GooglePlacesInput}
-       
-          />
+            OnLocationSelect={this.handleLocationSelect}
+           
+          /> */}
 
           <Button
             style={{ margin: 10 }}
             block
-            primary
+            Success
             onPress={this.props.handleSubmit(this.onFormSubmit)}
           >
-            <Text>Submit</Text>
+            <Text>Create Event</Text>
           </Button>
         </Content>
-       
-      </Container>
+      </KeyboardAwareScrollView>
     );
   }
 
@@ -174,7 +201,8 @@ class EventForm extends Component {
       Roboto: require("native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
     });
-    this.setState({ isReady: true,
+    this.setState({
+      isReady: true
     });
   }
 }
