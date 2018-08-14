@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Expo from "expo";
-//import { View } from "react-native";
+import { View, Modal, TouchableHighlight } from "react-native";
 import {
   Container,
   Item,
@@ -28,12 +28,16 @@ import {
   hasLengthGreaterThan
 } from "revalidate";
 
+import GooglePlacesInput from "../googlePlaces/PlacesAutoCompleteTest";
+
+//import GoogleMapComponent from '../googlePlaces/GoogleMapComponent'
+
 const DATETIME_FORMAT = "YY-MM-DD HH:mm";
 
- const mapState = state => ({
+const mapState = state => ({
   selectedDate: null
-});  
-
+});
+// to do only once
 /* const mapState = (state, ownProps) => {
   const eventId = null; //ownProps.match.params.id;
   let event = {};
@@ -67,8 +71,14 @@ const validate = combineValidators({
 class EventForm extends Component {
   state = {
     isReady: false,
-   // selectedDatetime:moment().format('YYYY-MM-DD')
+    modalVisible: false
+    // selectedDatetime:moment().format('YYYY-MM-DD')
   };
+
+  constructor(props) {
+    super(props);
+ 
+  }
 
   handleChange = (name, val) => {
     console.log("handle changed: ", val);
@@ -91,8 +101,12 @@ class EventForm extends Component {
     this.props.createEvent(newEvent);
   };
 
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
   render() {
-   var today = moment().format('YYYY-MM-DD HH:mm');
+    var today = moment().format("YYYY-MM-DD HH:mm");
     if (!this.state.isReady) {
       return <Expo.AppLoading />;
     }
@@ -110,31 +124,36 @@ class EventForm extends Component {
             component={TextInput}
             placeholder="Title"
           />
-         <Field
+
+{/*           <Field
+            name="place"
+            //   onChange={v => this.handleChange("title", v)}
+            component={GooglePlacesInput}
+            placeholder="place"
+          /> */}
+          <Field
             name="startDate"
             selectedDatetime={today}
             component={DateInput}
-            onDatePicked ={v => this.handleChange("startDate",v)}
+            onDatePicked={v => this.handleChange("startDate", v)}
             placeholder="Start Date"
             dateFormat={DATETIME_FORMAT}
-          /> 
+          />
 
-             <Field
+          <Field
             name="endDate"
             selectedDatetime={today}
             component={DateInput}
-            onDatePicked ={v => this.handleChange("endDate",v)}
+            onDatePicked={v => this.handleChange("endDate", v)}
             placeholder="End Date"
             dateFormat={DATETIME_FORMAT}
           />
 
-             <Field
+           <Field
             name="location"
-            onChange={v => this.handleChange("location", v)}
-            component={TextInput}
-            placeholder="Location"
+            component={GooglePlacesInput}
+       
           />
-
 
           <Button
             style={{ margin: 10 }}
@@ -145,6 +164,7 @@ class EventForm extends Component {
             <Text>Submit</Text>
           </Button>
         </Content>
+       
       </Container>
     );
   }
@@ -154,7 +174,8 @@ class EventForm extends Component {
       Roboto: require("native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
     });
-    this.setState({ isReady: true });
+    this.setState({ isReady: true,
+    });
   }
 }
 
