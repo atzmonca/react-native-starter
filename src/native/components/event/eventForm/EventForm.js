@@ -32,7 +32,6 @@ import {
   isRequired,
   hasLengthGreaterThan
 } from "revalidate";
-
 import GooglePlacesInput from "../googlePlaces/PlacesAutoCompleteTest";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
@@ -101,7 +100,9 @@ class EventForm extends Component {
       }
     });
   };
-
+  handleLocationPress = () => {
+    console.log("handleLocationPress fire");
+  };
   onFormSubmit = () => {
     console.log("values", this.state);
     const newEvent = {
@@ -147,17 +148,12 @@ class EventForm extends Component {
             placeholder="Title"
           />
 
- <Item>
-              <Input placeholder="Location" onFocus={() => console.log('kay press')}
-              />
-            </Item>
-
-         {/*  <Field
-            name="place"
-            //   onChange={v => this.handleChange("title", v)}
+         <Field
+            name="location"
             component={GooglePlacesInput}
-            placeholder="place"
-          /> */}
+            OnLocationSelect={this.handleLocationSelect}
+           
+          /> 
           <Field
             name="startDate"
             selectedDatetime={today}
@@ -175,13 +171,7 @@ class EventForm extends Component {
             placeholder="End Date"
             dateFormat={DATETIME_FORMAT}
           />
-         
-          {/*  <Field
-            name="location"
-            component={GooglePlacesInput}
-            OnLocationSelect={this.handleLocationSelect}
-           
-          /> */}
+
 
           <Button
             style={{ margin: 10 }}
@@ -192,6 +182,33 @@ class EventForm extends Component {
             <Text>Create Event</Text>
           </Button>
         </Content>
+{/*         <Content>
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {
+              alert("Modal has been closed.");
+            }}
+          >
+            <View style={{ marginTop: 22 }}>
+              <View>
+                <GooglePlacesInput
+                  name="location"
+                  onLocationPress={this.handleLocationPress}
+                  OnLocationSelect={this.handleLocationSelect}
+                />
+
+                 <TouchableHighlight
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text>Hide Modal</Text>
+              </TouchableHighlight> 
+              </View>
+            </View>
+          </Modal>
+        </Content> */}
       </KeyboardAwareScrollView>
     );
   }
